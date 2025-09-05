@@ -1,0 +1,1231 @@
+The product, by modules
+1) “Band Room” (home + projects)
+Create/Import/Open projects; each project stores audio, video, scores, settings, and collaborators.
+
+
+Formats: MusicXML for notation interchange, MIDI for timing/playback, WAV/MP3/MP4 for media, plus your custom JSON for project state. Use OSMD to render MusicXML and VexFlow for custom percussion/Berger rendering in the browser. GitHubopensheetmusicdisplay.github.iovexflow.com+1
+
+
+2) Listen → identify the tune (build the playlist)
+Song recognition (from a rehearsal video or board mix): on iOS, ShazamKit is the cleanest API; it matches audio to the Shazam catalog, or to your own custom catalog for originals. For cross-platform, consider Audd.io/ACRCloud later. Apple Developer+1
+
+
+Output: title/artist/ISRC; add to the project’s playlist.
+
+
+3) OCR/OMR of sheet music (staff and Berger/pipe-band workflow)
+Printed staff music → MusicXML: Audiveris (open-source OMR) is the go-to; can be self-hosted and already used in PDF→MusicXML pipelines. You’ll still do a human “verification pass.” GitHubaudiveris.github.ioReddit
+
+
+Berger/Uniline notation (Scottish/Swiss pipe-band side-drum sticking): represents sticking with note-above/ below line (R/L) as Berger specifies; render via VexFlow extensions or post-process the MusicXML before OSMD. Background on Berger Uniline & history: MuseScore+1Wikipediacadre-online.ca
+
+
+4) “Make it editable” (notation/editor)
+Renderer: OSMD (MusicXML → score) + VexFlow (JS engraving, good percussion support). You can attach stickings, sticking-accent glyphs, and Berger line logic. GitHubvexflow.com+1
+
+
+Edits: quantize, change time signatures, barlines, tuplets, grace clusters, stickings, flams/drags/buzzes.
+
+
+5) Audio tools (slow down, speed up, reverse, solo)
+Time-stretch/pitch-shift: Rubber Band Library (battle-tested, open-source; great quality). For reversing or simple trims, FFmpeg behind the scenes. Breakfast QuayGitHub
+
+
+Beat/tempo estimation & metronome sync: Essentia/Madmom & QM Vamp Plugins for onset/beat/tempo; drive a click visually and line up barlines. Essentia+1GitHubvamp-plugins.org
+
+
+Source separation (optional later): separate drums from mix with recent SOTA, then run transcription just on the drum stem (improves accuracy).
+
+
+6) Automatic drum transcription (AI heavy lifter)
+What’s feasible now: classify onsets and map to kit/drum types, or to pipe-band categories (side/tenor/bass). Open-source starting points include ADTLib + madmom CRNN examples; academic SOTA keeps advancing (see reviews/datasets). Expect human correction loops; drums in mixes are still tricky. GitHub+1MDPITISMIR Transactions
+
+
+7) Pipe-band specifics (tenor, bass, “chips,” rolls)
+Sections: side (snare), tenor, bass. “Chips” are the accented punctuations/entries the corps plays—common term in pipe-band literature. Your metronome/trainer can highlight roll lengths (e.g., 9-stroke roll) and practice sticking. Wikipediancirishpipeband.comisleofmauipipeband.org
+
+
+Practice Room: load a bagpipe part (MIDI/MP3), set mix levels; slow/speed, loop phrases, click subdivisions; display stick heights/accents overlays.
+
+
+8) Libraries directory (legal, free scores)
+Link curated sources of public/free pipe-band scores (snare/tenor/bass) and massed-band standards; import to project with one tap. tenorandbass.wordpress.com+1rspba.org
+
+
+9) Collaboration/export
+Export: MusicXML, MIDI, PDF (render SVG/Canvas → PDF), stem WAVs, and your “.bandroom” JSON.
+
+
+Share: email link, device/cloud (Drive/iCloud/Dropbox), and optional GitHub export (user token → create repo/commit score + audio).
+
+
+Roles: owner/editor/commenter; invite by email; 2-step verification at sign-up.
+
+
+10) Preferences
+Theme/background colors, save path, per-project defaults, privacy, autosave cadence, hotkeys.
+
+
+Where AI fits best (today)
+Audio → beats & sections: tempo map, barlines, phrase suggestions. (Essentia, madmom, Vamp). EssentiaGitHubvamp-plugins.org
+
+
+Audio → drum onsets/labels: kick/snare/hat/tenor/bass; generates a first-draft score you correct. (ADTLib + modern CRNNs; leverage new datasets like STAR Drums). GitHubTISMIR Transactions
+
+
+OMR cleanup: use Audiveris for first pass, then an LLM+rules layer to fix common OMR errors before you see them. GitHub
+
+
+Style assistants: “Make this a 2/4 military cadence” or “Convert to Berger Uniline with right-hand leads.” Provide pattern libraries and promptable templates. Background: Berger system used for sticking indication in Scottish/Swiss traditions. MuseScore
+
+
+Practice coaching: on-device mic listens for timing against the click, flags late/early hits and roll evenness; suggests rudiment drills.
+
+
+MVP cut (8–12 weeks scope, realistic)
+Core: Projects + Band Room, import (audio/video/MusicXML), OSMD+VexFlow rendering and basic editor, Rubber Band time-stretch, reverse, click track & loop, simple export (PDF/MusicXML/MIDI). GitHubvexflow.com
+
+
+AI v1: beat/tempo detection + barline placement; first-pass drum onsets (3-class kit or side/tenor/bass), with editable lane view. EssentiaGitHub
+
+
+Pipe-band v1: Berger sticking display toggle; upload library links panel. MuseScore
+
+
+Auth/Collab: email sign-in, TOTP 2FA, project invites (viewer/editor).
+
+
+Nice-to-haves: ShazamKit on iOS for playlist match; GitHub export after core is stable. Apple Developer
+
+
+Tech picks (dev-friendly)
+Frontend: React + TypeScript, WebAudio, OSMD + VexFlow. GitHubvexflow.com
+
+
+Audio engine: WebAssembly build of Rubber Band (fast, high quality) + FFmpeg.wasm for basics. Breakfast Quay
+
+
+AI/Signal: server-side Python workers with Essentia/madmom/Librosa; queue via Celery; store results as aligned event lists. EssentiaGitHub
+
+
+OMR: Audiveris in a container; push MusicXML to the editor. GitHub
+
+
+Backend: FastAPI + Postgres (projects, users, collaborators), S3-style object store for media.
+
+
+Exports: PDF (headless render), MusicXML, MIDI; optional GitHub REST for repo push.
+
+
+Pipe-band glossary check
+Tenor / Bass / Side (Snare) are the standard drum sections.
+
+
+“Chips”: accented corps entries punctuating the melody—yep, you weren’t imagining that term. Wikipediancirishpipeband.com
+
+
+Berger/Uniline: single-line staff with above/below markers for R/L stickings; widely used in Scottish & Swiss traditions. MuseScore
+
+
+Risky bits (and how to de-risk)
+Automatic drum transcription on full mixes is still imperfect. Ship with a confident-only pass (onsets + labels), then an “Assist me” button to auto-fill likely stickings; keep edits fast. State of the art is moving (new datasets like STAR Drums). TISMIR Transactions
+
+
+OMR: great on clean prints; weaker on phone photos. Put a “Rescan with tips” loop: skew fix, contrast, staff detection, then warn if >2% symbol error so users aren’t surprised. audiveris.github.io
+
+
+Your metronome/trainer (fun bit)
+Subdivisions, visual stick-height lanes, roll-length guidance (e.g., 9-stroke), “precision heatmap” per bar, and a “piper low in the mix” playback so side/tenor/bass can practice their piece. Tutorial panels can link to reputable tenor/bass resources and massed-band scores. tenorandbass.wordpress.com+1
+
+
+Data & export hygiene
+Interchange first (MusicXML/MIDI), then PDFs and stems. OSMD+VexFlow give you browser-side rendering and PDF export; GitHub export is just a content push. GitHubvexflow.com
+
+
+Quick links (for Kimber’s research stash)
+OMR: Audiveris (open-source), Dockerable PDF→MusicXML. GitHubReddit
+
+
+Notation rendering: OSMD + VexFlow (+ percussion tests). GitHubvexflow.com
+
+
+Audio DSP: Rubber Band (stretch/shift). Breakfast Quay
+
+
+Beat/tempo: Essentia / madmom / QM Vamp. EssentiaGitHubvamp-plugins.org
+
+
+Drum transcription: ADTLib; current research & datasets. GitHubMDPITISMIR Transactions
+
+
+Pipe-band notation: Berger Uniline background. MuseScore
+
+
+—
+Non-destructive markup & review
+Markup layers (no score changes):
+Every project gets CommentLayer objects that sit over the notation/audio timeline.
+
+
+Anchors can be:
+
+
+Time: bar:beat:tick or absolute ms.
+
+
+Notation: stable element IDs (measureID, noteID, voice, staff).
+
+
+Waveform: sample index ranges for audio-only comments.
+
+
+Tools: highlight, box, arrow, freehand, sticky note, and “callout at time” pins.
+
+
+Toggle layer visibility per reviewer; merge/export as PDF with overlays when needed.
+
+
+Assign & resolve:
+Each comment = {assignee, status(open/needs-work/resolved), priority, dueDate}.
+
+
+Threaded replies + emoji reactions.
+
+
+“Request changes” mode: batches unresolved items into a Review Pack you can send.
+
+
+Teacher voiceover & timed notes:
+VoiceNotes: quick mic capture that auto-attaches to the current playhead time.
+
+
+Optional “duck background” while recording notes so the teacher can speak over the student’s take.
+
+
+Playback shows floating markers; click to jump.
+
+
+Versioning & safety rails:
+Snapshots: “Before/After” compare of MusicXML/MIDI + markup diffs.
+
+
+Role caps: Reviewer can comment/mark up, but cannot edit score/audio.
+
+
+Recording, overdub, stems, exports
+Takes & tracks:
+Multitrack lane UI: Bagpipes / Side / Tenor / Bass / Click / Backing audio / VoiceNotes.
+
+
+Record modes:
+
+
+Solo take (only your mic)
+
+
+Overdub (mic + selected playback busses in your headphones)
+
+
+Latency compensation (calibrated with a short click test).
+
+
+Punch in/out, loop-record with “choose best comp” later.
+
+
+Mix control:
+Simple mixer (mute/solo, pan, gain) + per-track EQ/compressor presets (“Practice Bright,” “Pipe-Bed Low”).
+
+
+Render:
+
+
+MP3/FLAC/WAV full mix
+
+
+Stems per track
+
+
+Practice mix (pipes low, drums up, click optional)
+
+
+Export targets:
+File: MP3/FLAC/WAV, MusicXML, MIDI, PDF (score or score+markup).
+
+
+Share link (viewer or commenter).
+
+
+“Send to teacher” (bundles audio + Review Pack + quick play link).
+
+
+“Shared Drive” without looking like Google
+Spaces (left sidebar):
+Band Room (your recent), My Projects, Shared with Me, Teams, Review Packs, Trash.
+
+
+Views: Grid (covers), List (dense), Board (review columns: To Review / In Progress / Resolved).
+
+
+Quick filters: instrument (side/tenor/bass), time sig, tempo range, key tags (“2/4 march,” “MSR,” “hornpipe”).
+
+
+Theme kits (distinct visual identity):
+
+
+Slate & Heather – charcoal + muted violet accents
+
+
+Brass & Birch – warm gold + pale wood paper texture
+
+
+Nordic Blue – deep blue + ice-gray with high-contrast glyphs
+
+
+Skye Night – near-black + teal light lines (great for dark rooms)
+
+
+Collaboration & permissions
+Roles: Owner / Editor / Commenter / Viewer.
+
+
+Invite by email with TOTP 2-step at sign-up.
+
+
+Project-level Share Folder: drag files in; commenters can upload references but not alter the score.
+
+
+Notifications: @mentions, assignment changes, “bar 17 updated” pings; daily digest optional.
+
+
+Under the hood (so it stays smooth)
+Markup model:
+
+ Markup {
+  id, projectId, layerId, anchor:{type:'time'|'notation'|'wave', value:{...}},
+  shape:{type:'pin'|'box'|'arrow'|'freehand'|'highlight'|'note'},
+  color, authorId, createdAt, threadId?, resolvedAt?, assigneeId?, severity?
+}
+Thread { id, messages:[{authorId, text|voiceNoteId, createdAt}] }
+
+
+Takes & renders: store raw WAVs; render MP3/FLAC server-side for speed, keep stems aligned by startTime.
+
+
+Export engine: one command builds: mix, stems, PDF+markup, zipped .bandroom bundle (project JSON + assets).
+
+
+Teacher workflow (chef’s kiss)
+Student hits Record Overdub (pipes low, click on).
+
+
+Export Practice Mix MP3 + Review Pack link.
+
+
+Teacher opens link → hears take, drops timed VoiceNotes and arrows on measures 9–12, assigns “fix flam spacing” to Student.
+
+
+Student resolves items; snapshot saved; teacher gets a tidy “2 items resolved” ping.
+
+
+The metronome + critique tie-in
+Metronome can auto-highlight bars with the worst timing variance and suggest drills (e.g., 9-stroke roll at 76→88 BPM ladder).
+
+
+One click makes a Practice Set: three loops, 2 minutes each, exports as a shareable routine.
+
+
+GitHub tie-in (opt-in)
+Connect account → choose repo → Export Project to Repo (MusicXML, MIDI, stems, PDFs, project.json).
+
+
+Nice for versioned lesson materials or open-score collabs.
+
+
+Implement next (fast path)
+CommentLayer + assignables on score/time with hide/show.
+
+
+VoiceNotes pinned to timeline.
+
+
+Overdub recording with basic mixer and MP3 export.
+
+
+Share Spaces UI (distinct theme kit) + role-based invites.
+
+
+Snapshot/version compare and Review Pack export.
+
+
+Accessory Suggestion via BT 
+The sticks are basically a mashup of air-drumming controllers and MIDI percussion triggers. They typically have tiny IMUs (inertial measurement units: accelerometers + gyros) inside, plus a Bluetooth transceiver. That lets them:
+Detect swing velocity → map to dynamics (loud vs soft).
+
+
+Detect angle/position → map to instrument zones (ride, hi-hat, snare, cowbell, etc.).
+
+
+Trigger MIDI notes on a phone, tablet, or computer.
+
+
+Some versions add optical tracking or bumpers so you can tap on a surface quietly but still get that tactile “stick rebound.” If they’re MIDI over Bluetooth, your app could absolutely listen in and treat them like any other MIDI controller. That means:
+If a drummer only has one cymbal, you can let them assign “this motion = crash” and “this angle = hi-hat.”
+
+
+You could run a “practice mapping wizard” so players define their own rig instead of being forced into a generic trap kit.
+
+
+Your metronome/analysis tools can compare their input (MIDI hits) against the expected score and flag “late on the flam” or “wrong surface.”
+
+
+That ties right into the feedback loop you want: “too slow here,” “not crisp,” “wrong symbol,” and—critically—“not enough cowbell.”
+T-shirt idea
+Scottish pipe band corps, pipers blazing behind them, snare drummer holding a cowbell with the words ‘Never Enough Cowbell’. Merch store and app’s Easter eggs. Maybe even a practice mode called Cowbell Crisis, where every wrong hit gets replaced by a cowbell sample. 
+Wish List (add-ons after core)
+A) Markup, review, and teaching tools
+Non-destructive Markup Layers: pins, arrows, highlights, freehand, sticky notes—anchored to time, waveform ranges, or specific notes/measures.
+
+
+Assign & Resolve: @mentions, assignee, priority, due date, “Needs work / Resolved” states, review queue.
+
+
+Timed Voice Notes: teachers drop quick voice comments that snap to the timeline; auto-duck background during recording.
+
+
+Snapshots & Compare: one-click “Before/After” for MusicXML/MIDI + markup diffs; restore points.
+
+
+B) Recording, overdub, and exports
+Overdub Modes: record just your mic, or mic + backing in headphones; punch in/out; loop takes; latency calibration.
+
+
+Mixer & Presets: per-track mute/solo/pan/gain; simple EQ/comp presets (Practice Bright, Pipe-Bed Low).
+
+
+Export Profiles: Full Mix (MP3/FLAC/WAV), Stems (per track), Practice Mix (pipes low, click optional), PDF w/ overlays, MusicXML, MIDI.
+
+
+“Send to Teacher” Bundle: audio + Review Pack + instant play link.
+Summary Export: one-click PDF/CSV + share link to director; optional per-player private annex.
+Watermarks on Exports: customizable logo/text watermark burned into PDFs and optional audio metadata.
+
+
+Summary Export (Director): one-click PDF/CSV + share link; per-player annex optional.
+
+
+Personal Clip Recorder (3-min): user can record a 3-minute clip in Band Room Live; the owner’s clip persists; everyone else’s view access expires per retention policy.
+C) “Shared Drive” experience (without looking like Google)
+Spaces: Band Room / My Projects / Shared with Me / Teams / Review Packs / Trash.
+
+
+Views: Grid (covers), List (dense), Board (To Review → Resolved).
+
+
+Quick Filters: instrument (side/tenor/bass), meter, tempo, tags (2/4 march, MSR, hornpipe).
+
+
+Theme Kits: Slate & Heather; Brass & Birch; Nordic Blue; Skye Night (dark).
+App Logo & Theme Branding: single logo system applied across UI, watermarks, and exported assets
+D) Practice intelligence
+“You were late here” Timing Heatmap: bar-by-bar deviation; color the worst offenders.
+
+
+Rudiment Coach: detects flams/drags/9-stroke roll uniformity; suggests drills and BPM ladders.
+
+
+Practice Sets: one-click loop packs (3 focused loops × 2 min each) you can share.
+Measure Numbering Toggle: preference to show measure numbers above score.
+
+
+Loop by Measure Range: select start/end measures (e.g., 28–32) → auto-repeat until stopped; visible in score and transport.
+Director’s AI Summary: per-rehearsal auto-report (timing, rolls, dynamics, hotspots) with confidence scores; anonymized by default.
+
+
+Practice Cards: auto-generated loops + rudiment prescriptions linked to the hotspot measures
+E) Pipe-band specifics
+Tenor / Bass / Side lanes and shorthand for “chips”/accents.
+
+
+Berger/Uniline toggle for sticking (R/L above/below line).
+
+
+Massed-band library links and importers (snare/tenor/bass parts).
+
+
+F) Bluetooth/MIDI sticks + e-kits
+Practice Mapping Wizard: define your personal rig (one cymbal? fine), map motions/zones to instruments, save presets.
+
+
+Bluetooth MIDI & USB MIDI: capture hits with velocity/pos; compare to expected score in real time.
+
+
+Air/Surface Modes: quiet bumpers supported; sensitivity and ghost-note thresholds.
+
+
+Cowbell Mode: every wrong surface swaps to cowbell (because there’s never enough cowbell).
+z
+G) Collaboration & repos
+Roles: Owner / Editor / Commenter / Viewer; project-level share folders.
+
+
+GitHub Export: push MusicXML/MIDI/PDF/stems + project.json to a repo with one click.
+
+
+H) Band Room Live (experimental module)
+Virtual Rehearsal Space: integrated video room with per-user camera & mic.
+
+
+Backgrounds (Preferences): change visual room (Band Hall, Highlands, etc.)—client-side virtual background.
+
+
+Shared Score Pointer: leader highlights measures for all.
+
+
+Synced Looping: host sets loop (e.g., 28–32) and everyone’s playback follows.
+
+
+Record Session (Host): host can start a room-level recording (multi-track capture described below).
+
+
+Personal Clip Recorder (User): any participant may record their own 3-minute take (with countdown); saved privately to them, shareable at their choice.
+
+
+Grading & Anonymized Submission: each client runs local analysis → uploads anonymized metrics; director receives ensemble summary without names by default.
+Talk + Play: low-latency audio channels for “play together” experiments, with fallback to “play separately but compare recordings.”
+Collab Board: chat, emoji, assign follow-ups during session.
+
+
+I) UI & Button Factory
+Spotify-style Round Buttons (Play/Pause/Stop/Record/Loop/Overdub/Metronome/Export/Share).
+
+
+Button Factory Module for consistent icons, sizes, and states.
+Round Buttons Default: ties visually to drums (circular motif).
+
+
+Adult/Professional Aesthetic + optional retro “Trap” skin.
+Alt Interface Option: consider Fruity Loops–style retro mode for trap set workflows, while Scottish/pipe-band gets the clean “Band Score” mode.
+J) Privacy & Retention
+Rolling Retention Window: session recordings & shared assets auto-expire after 30 days (download within window).
+
+
+Personal Clips Persist for Owner: user-recorded 3-min clips remain in their library unless deleted; others only see them if the owner shares.
+
+
+Consent & Indicators: clear “recording” banner, red tally light, and consent modal when recording starts.
+
+
+Anonymity by Default: AI summaries anonymized (Snare-A, Tenor-2). Director can map identities privately.
+
+
+Data Minimization: low-res proxies for quick review; originals in cold storage; encryption at rest; regional storage selection.
+
+
+K) Cohesion & Latency Calibration
+Quick Sync Test (15–20 min cadence): host triggers a 20-second drill; each player taps stick clicks (or uses a built-in click) while their app measures:
+
+
+Device round-trip latency (mic→net→server→back).
+
+
+Clock skew/drift (their device clock vs session clock).
+
+
+Input latency (mic + driver) and output latency (DAC/buffer).
+
+
+Auto-Offsets: client applies per-user input/output offsets so hits land on the shared timeline together.
+
+
+Drift Correction: gentle time-base resync (tiny resample or buffer nudge) so long rehearsals don’t “fan out.”
+
+
+MIDI Priority Path: if a player has Bluetooth/USB-MIDI sticks, use MIDI timestamps for near-perfect alignment; audio follows MIDI.
+
+
+Pre-Take Gate: before a 3-minute recording, run a 10-second mini-sync; warn if anyone is >±25 ms out.
+
+
+Visual Confidence Bar: green (≤10 ms), amber (≤25 ms), red (>25 ms); encourages a rerun if needed.
+
+
+
+
+Prototype Gameplan (how to get a working demo fast)
+Phase 0 — Decide the scaffolding
+Target first: Web (React + TypeScript) so Kimber can keep using Lovable.
+
+
+Audio/Notation stack: WebAudio + WebAssembly DSP (time-stretch), VexFlow for engraving (percussion friendly), MusicXML in/out.
+
+
+MIDI IO: Web MIDI API for desktop browsers (Chrome/Edge). Bluetooth MIDI pairs at OS level; app just listens like any MIDI device.
+
+
+Mobile later: wrap in Capacitor/Expo for iOS/Android with CoreMIDI / Android MIDI when ready.
+
+
+Phase 1 — Click-through prototype
+Screens: Band Room (cards + filters), Score Editor (notation pane + timeline), Transport Bar (play/loop/metronome), Markup Toolbar, Assignments Drawer, Mapping Wizard (mock).
+
+
+No audio logic yet—just believable UI, modal flows, and fake data so stakeholders “feel” it.
+
+
+Phase 2 — Functional demo 
+Playback & Metronome: load audio, loop ranges, click on/off; simple tempo map.
+
+
+Recording (basic): capture mic, overdub to headphones, write aligned WAV; export MP3.
+
+
+Markup v1: pins/highlights anchored to time + measure; comments + @mentions; resolve states.
+
+
+Export v1: PDF (canvas → PDF), MusicXML pass-through, MP3 mixdown.
+
+
+MIDI In v1: detect hits from e-kit/Bluetooth sticks; show live lanes and latency readout.
+
+
+Timing Heatmap v1: compute per-note early/late against click and color the bar.
+
+
+Phase 3 — Teach-and-critique loop 
+Voice Notes: timeline-anchored, auto-duck; playback inline.
+
+
+Review Pack: ZIP with audio, PDF (with overlays), comments JSON, and a shareable link.
+
+
+Practice Sets: generate loops + save as named routines.
+
+
+Phase 4 — Pipe-band pass
+Berger Toggle & Sticking Glyphs.
+
+
+Tenor/Bass lanes and “chips” accent presets.
+
+
+Library Importers (URLs → project).
+
+
+
+Minimal tech picks (for Kimber’s repo)
+Frontend: React + TS, Vite, Zustand (state), Tailwind (fast UI), VexFlow (engraving), Tone.js (metronome), Web MIDI.
+
+
+DSP: Rubber Band (WASM build) for stretch; lame.js for MP3 export to start.
+
+
+Backend (later): FastAPI + Postgres + S3-style storage. For the prototype, use local IndexedDB and a tiny Node/Express file server.
+
+
+Data: MusicXML + project.json (tracks, takes, markers, markup, assignments).
+
+
+Auth (later): email + TOTP; for demo, magic link via Supabase or Clerk.
+
+
+Repo sketch
+/apps/web
+  /src
+    /modules/bandroom
+    /modules/score
+    /modules/record
+    /modules/review
+    /modules/mapping
+    lib/audio/  lib/notation/  lib/midi/
+    state/      components/    pages/
+  public/ (icons, sample scores)
+/server (optional mock)
+
+
+Fast research checklist (no blockers, fast to do)
+Bluetooth MIDI reality check: pair device at OS level → confirm Web MIDI events in Chrome.
+
+
+Glowing sticks candidates: verify they output standard MIDI (note/velocity) vs proprietary app only. If proprietary, route via their desktop bridge to virtual MIDI.
+
+
+Latency budget: measure round-trip; set auto-offset after a click test.
+
+
+PDF overlay legibility: dark mode annotations must invert for print.
+
+
+Tiny usability touches
+“Confidence coloring” on AI suggestions (green/amber/red) so humans know where to fix first.
+
+
+Hold-to-preview on tempo changes before committing.
+
+
+One-tap “Send to Teacher” on the transport bar.
+
+
+Easter egg: toggle Cowbell Crisis in settings.
+
+
+Wish List (add-ons after core)
+A) Markup, review, and teaching tools
+Non-destructive Markup Layers: pins, arrows, highlights, freehand, sticky notes—anchored to time, waveform ranges, or specific notes/measures.
+
+
+Assign & Resolve: @mentions, assignee, priority, due date, “Needs work / Resolved” states, review queue.
+
+
+Timed Voice Notes: teachers drop quick voice comments that snap to the timeline; auto-duck background during recording.
+
+
+Snapshots & Compare: one-click “Before/After” for MusicXML/MIDI + markup diffs; restore points.
+
+
+B) Recording, overdub, and exports
+Overdub Modes: record just your mic, or mic + backing in headphones; punch in/out; loop takes; latency calibration.
+
+
+Mixer & Presets: per-track mute/solo/pan/gain; simple EQ/comp presets (Practice Bright, Pipe-Bed Low).
+
+
+Export Profiles: Full Mix (MP3/FLAC/WAV), Stems (per track), Practice Mix (pipes low, click optional), PDF w/ overlays, MusicXML, MIDI.
+
+
+“Send to Teacher” Bundle: audio + Review Pack + instant play link.
+
+
+C) “Shared Drive” experience (without looking like Google)
+Spaces: Band Room / My Projects / Shared with Me / Teams / Review Packs / Trash.
+
+
+Views: Grid (covers), List (dense), Board (To Review → Resolved).
+
+
+Quick Filters: instrument (side/tenor/bass), meter, tempo, tags (2/4 march, MSR, hornpipe).
+
+
+Theme Kits: Slate & Heather; Brass & Birch; Nordic Blue; Skye Night (dark).
+
+
+D) Practice intelligence
+“You were late here” Timing Heatmap: bar-by-bar deviation; color the worst offenders.
+
+
+Rudiment Coach: detects flams/drags/9-stroke roll uniformity; suggests drills and BPM ladders.
+
+
+Practice Sets: one-click loop packs (3 focused loops × 2 min each) you can share.
+
+
+Measure Numbering Toggle: preference to show measure numbers above score.
+
+
+Loop by Measure Range: select start/end measures (e.g., 28–32) → auto-repeat until stopped; visible in score and transport.
+
+
+E) Pipe-band specifics
+Tenor / Bass / Side lanes and shorthand for “chips”/accents.
+
+
+Berger/Uniline toggle for sticking (R/L above/below line).
+
+
+Massed-band library links and importers (snare/tenor/bass parts).
+
+
+F) Bluetooth/MIDI sticks + e-kits
+Practice Mapping Wizard: define your personal rig (one cymbal? fine), map motions/zones to instruments, save presets.
+
+
+Bluetooth MIDI & USB MIDI: capture hits with velocity/pos; compare to expected score in real time.
+
+
+Air/Surface Modes: quiet bumpers supported; sensitivity and ghost-note thresholds.
+
+
+Cowbell Mode: every wrong surface swaps to cowbell (because there’s never enough cowbell).
+
+
+G) Collaboration & repos
+Roles: Owner / Editor / Commenter / Viewer; project-level share folders.
+
+
+GitHub Export: push MusicXML/MIDI/PDF/stems + project.json to a repo with one click.
+
+
+H) Band Room Live (experimental module)
+Virtual Rehearsal Space: integrated video room (like Zoom) directly in the app for remote practice.
+
+
+Shared Score Pointer: leader can drag a cursor/highlight; all participants see the focus measure.
+
+
+Synced Looping: host sets loop range (e.g., measures 28–32); everyone’s playback follows.
+
+
+Talk + Play: low-latency audio channels for “play together” experiments, with fallback to “play separately but compare recordings.”
+
+
+Collab Board: quick chat, emoji reactions, assign follow-up tasks right in-session.
+
+
+
+Editor Look & Feel Direction
+Transport Bar: center, Spotify-like layout. Round buttons (Play ⏵, Stop ⏹, Record ●, Loop ⟳). Slight hover glow, no neon colors.
+
+
+Notation Pane: clean, engraved look (think Sibelius/MuseScore). Measure numbers toggle above staff.
+
+
+Timeline/Markers: draggable loop in/out handles, like DAWs but simplified.
+
+
+Review/Markup Toolbar: docked right side, icons round + minimal (comment, pen, pin, highlight).
+
+
+Mixer Drawer: slides up/down; round knobs echoing drum motif.
+
+
+Export/Share Panel: side modal, shows watermark preview and export types.
+
+
+Themes applied: colors, logo watermark on score header/footer, app-wide typography consistent with “adult/professional” brand.
+
+
+
+
+What the AI can reliably do from a rehearsal video
+Tempo map & barlines: detect the click/pulse, generate a bar-by-bar grid, and align the audio to the score (MusicXML) using DTW (dynamic time warping).
+
+
+Timing deviations: measure “early/late” per note or per beat for each detected source; produce a heatmap and callouts like “late by ~38 ms average in bars 28–32.”
+
+
+Roll length & consistency: detect stroke density and evenness over time; flag “9-stroke extended into beat 2,” “buzz unevenness peaks at bar 17.”
+
+
+Dynamics consistency: track RMS (loudness) vs expected accents; flag “tenor accents underplayed in bars 9–12.”
+
+
+Section drift: identify when the ensemble tempo slips vs click or piper; “corps accelerates +3% after the key change.”
+
+
+Wrong surface / wrong voice (best with MIDI): if sticks/e-kit send MIDI, mis-hits (“ride vs hi-hat”) and missed notes are caught precisely. From raw audio alone, this is harder, but some patterns are detectable after separation.
+
+
+What makes it possible (the pipeline)
+Sync & calibrate (30 sec setup):
+
+
+One hand-clap (or click burst) at the top to sync cameras and mics.
+
+
+Optional latency test (call-and-response click) to auto-offset your device.
+
+
+Separate the sources:
+
+
+Use source separation (drums/pipes/room), then optionally diarization (who’s who) if you want per-player tracks. Label anonymous by default to avoid “group Shannon.”
+
+
+If anyone uses Bluetooth/MIDI sticks, merge their MIDI with audio for gold-standard timing.
+
+
+Align to score:
+
+
+Import MusicXML; compute an audio-to-score map (DTW). That gives you measure numbers and note anchors for precise feedback.
+
+
+Measure features:
+
+
+Onset timing, stroke density for rolls, accent strength, loudness trends, subdivision clarity, stick-height proxy (from transient sharpness).
+
+
+Summarize with guardrails:
+
+
+Generate a Critique Summary with confidence scores and anonymized labels by default. Only the director can map back to names if desired.
+
+
+An example of a respectful, non-shaming output
+Director’s snapshot (example)
+Overall: Avg timing variance 24 ms. Drift +2.1% faster after bar 32.
+
+
+Hotspots: Bars 28–32 (late entries on beat 3), 44–46 (tenor rolls extend ~⅛ beat), 57 (chips under-accented).
+
+
+Section notes:
+
+
+Side (group): 9-stroke rolls unevenness peaks at bars 14–16; practice at 76→88 BPM ladder.
+
+
+Tenor (group): Swing accent at bar 33 under 4 dB target; raise by ~3 dB.
+
+
+Bass (group): Ahead by ~20 ms on downbeats after bar 50—lock to pipes drone pulse.
+
+
+Confidence: High for timing; medium for roll analysis; low for wrong-surface detection without MIDI.
+
+
+Suggested drills: Loop 28–32 × 5; rudiment focus: flams at 0.75× speed; metronome subdivided in 8ths.
+
+
+Player envelopes (private, opt-in)
+Player A: avg +36 ms late in 28–32; improved to +12 ms by 33–36—nice recovery.
+
+
+Player B: over-rolled beat 4 in 44–46 by ~110 ms; repeat slow-roll exercise ×3.
+
+
+Limits/expectations (truth in packaging)
+Polyphonic chaos: raw room mics make per-player labeling imperfect. Separation helps, MIDI makes it sing.
+
+
+Wrong-surface from audio alone: possible in some cases, but expect false positives; encourage MIDI for precise hit-type detection.
+
+
+Confidence scores are essential: color-code feedback so humans know what to trust.
+
+
+Where this lives in your app
+Record → Analyze → Summary: after rehearsal upload, show a “Director’s Summary” and a “Practice Cards” set (auto-generated loops + drills).
+
+
+Privacy defaults: summaries are section-level by default; per-player requires opt-in and is visible only to the director unless shared.
+
+
+No group shaming mode: anonymized identifiers (Snare-A, Tenor-2). Director can remap names privately.
+
+
+MVP you can build now
+Timing & hotspot map (per bar).
+
+
+Roll detection v1 (stroke density + evenness).
+
+
+Loop generator (e.g., measures 28–32) and printable practice cards.
+
+
+Anonymized summary PDF with confidence badges.
+
+
+Optional MIDI merge for anyone using Bluetooth sticks/e-kits.
+
+
+JSON shape for the summary (drop-in to your backend)
+{
+  "projectId": "abc123",
+  "takeId": "t1",
+  "tempo": {"avgBpm": 92, "driftPct": 2.1},
+  "hotspots": [
+    {"measures":[28,32],"issue":"late_entries","avgMs":36,"confidence":0.86},
+    {"measures":[44,46],"issue":"roll_overrun","avgMs":110,"confidence":0.72}
+  ],
+  "sections": {
+    "side": {"timingVarMs": 22, "notes":["roll unevenness 14–16"], "confidence":0.8},
+    "tenor":{"timingVarMs": 27, "notes":["accents low at 33"], "confidence":0.7},
+    "bass": {"timingVarMs": 19, "notes":["ahead after 50"], "confidence":0.75}
+  },
+  "players": [
+    {"id":"Snare-A","lateMsAvg":36,"ranges":[[28,32]],"notes":["recovery 33–36"],"confidence":0.78}
+  ],
+  "drills":[
+    {"measures":[28,32],"type":"loop","reps":5,"tempo":"0.85x"},
+    {"type":"rudiment","name":"9-stroke roll","ladder":[76,80,84,88]}
+  ]
+}
+
+
+
+
+
+Band Room Live — recording & storage spec (concise)
+1) Recording modes
+Host Session Recording (room-level):
+
+
+What: composite grid video (speaker + grid), program audio mix, and per-user audio sidecars (if allowed).
+
+
+How: each client streams its camera/audio; server composes a program feed for the archive. Per-user audio is optional (consent).
+
+
+Why: director can rewatch the rehearsal and run ensemble analysis later.
+
+
+Personal Clip Recorder (per user):
+
+
+Limit: up to 3 minutes, local capture via MediaRecorder.
+
+
+Save: uploads to user’s private library; owner can share to project or export (MP4/MP3).
+
+
+Persistence: does not auto-expire for the owner; shared access respects 30-day window.
+
+
+2) Storage & retention
+Retention policy:
+
+
+Room recordings & shared assets: auto-delete after 30 days.
+
+
+Personal clips: persist for the owner; if shared to a project, the share link expires at 30 days, but the owner’s master copy remains.
+
+
+Storage tiers:
+
+
+Hot (0–7 days): quick scrubbing & instant playback (HLS).
+
+
+Warm (8–30 days): cheaper tier; starts pre-deleting thumbnails on day 21.
+
+
+Archive (owner clips only): long-term for the clip owner.
+
+
+Quotas (defaults, editable per team):
+
+
+Room recordings: e.g., 20 hours/month/team.
+
+
+Personal clips: e.g., 200 clips/user, soft cap with warnings.
+
+
+Downloads: anyone with permission can export during the window (MP4 for video, MP3/WAV for audio, ZIP for summary+assets).
+
+
+3) Consent, safety, and TOS guardrails
+Pre-record modal: “This session will be recorded. Video/audio may be stored for 30 days. Continue?”
+
+
+Live indicators: room banner + red dot on avatars being recorded.
+
+
+Per-user control: user may disable video or opt out of per-user audio capture; they can still attend.
+
+
+Director-only mapping: anonymized metrics map to names only in director’s private view.
+
+
+4) Grading & summary pipeline (privacy-first)
+Local analysis first: each client computes timing metrics against the click/score locally and uploads metrics only (no raw mic) unless user consents to audio.
+
+
+Server fusion: aggregate into ensemble Director’s AI Summary (hotspots, drift, rolls, dynamics) with confidence scores.
+
+
+Options: director can request full server-side analysis from room recording if deeper review is needed (explicit action).
+
+
+5) Backgrounds (preferences)
+Client-side virtual backgrounds: Band Hall, Highlands, Neutral Studio; adjustable blur for low-end devices.
+
+
+Admin option: lock backgrounds to “Neutral” for formal exams.
+
+
+6) UX flows (quick and clear)
+Start recording (host): Record ▶ → consent banner → 3-2-1 → “LIVE • Recording” badge.
+
+
+Mark loop focus: host drags measure range (28–32) → participants’ transport highlights and loops.
+
+
+Personal clip: user taps “Record 3:00” → countdown → takes captured; “Save privately / Share to project / Export.”
+
+
+After session: Director sees Session Summary, with download buttons and “Expire in 29 days” countdown.
+
+
+7) Minimal implementation notes
+Video: WebRTC for live; server-side compositor for program feed; MediaRecorder for personal clips.
+
+
+Audio: Opus for live; server transcode to HLS/MP4; separate WAV for analysis if enabled.
+
+
+IDs & linking: sessionId → assets → summaries; ownerId for personal clips; permission table for share links.
+
+
+Security: signed URLs, per-asset ACLs, AES-256 at rest; optional region pinning.
+
+
+
+Tiny JSONs (so Kimber can wire it fast)
+Retention policy
+{
+  "retentionDays": 30,
+  "roomQuotaHoursPerMonth": 20,
+  "personalClipLimit": 200,
+  "ownerClipsPersist": true,
+  "autoDeleteOnExpiry": true
+}
+
+Personal clip record
+{
+  "clipId": "pc_789",
+  "ownerId": "u_123",
+  "projectId": "p_456",
+  "durationSec": 175,
+  "createdAt": "2025-08-23T18:15:00Z",
+  "privacy": "private",
+  "shareLinks": [{ "id":"s_1", "expiresAt":"2025-09-22T18:15:00Z" }],
+  "assets": { "mp4":"...", "mp3":"...", "metrics":"..." }
+}
+
+Session summary (director view)
+{
+  "sessionId": "sess_001",
+  "expiresAt": "2025-09-22T19:00:00Z",
+  "hotspots": [
+    {"measures":[28,32],"issue":"late_entries","avgMs":34,"confidence":0.86}
+  ],
+  "driftPct": 1.9,
+  "sections": {"side": {"varMs":22}, "tenor": {"varMs":27}, "bass":{"varMs":19}},
+  "notes": ["tenor rolls overrun 44–46 ~100ms"],
+  "links": {"programMp4":"...", "audioMixMp3":"...", "pdf":"..."}
+}
+
+
+This gives you: live video practice, per-user recordings, anonymized grading, and a sane storage story that won’t bankrupt you—or embarrass anyone. Next natural step is a Band Room Live mock with: program feed window, Spotify-style round transport, “Loop 28–32 ⟳” badge, “Record Session” (host) and “Record 3:00” (user) buttons, plus a preferences panel for background + measure numbers.
+Add to Wish List
+
+
+How the Sync Drill Works (simple + robust)
+1) Shared timebase
+When players join, they lock to a session clock (WebRTC time sync + a few round-trips to estimate offset and jitter).
+
+
+We estimate clock skew (ppm drift) per device and keep correcting it slowly.
+
+
+2) Tap or click probe
+Host starts the drill → each client hears a short sequence (e.g., 8 clicks at 500 ms) and taps along (or lets the app auto-emit ticks).
+
+
+Client records taps with high-precision timestamps and sends only the metrics (mean/var, offset vs the session click), not raw audio.
+
+
+3) Compute per-user corrections
+Server fuses: network RTT, input/output latency estimates, and measured musical offset.
+
+
+Client applies:
+
+
+Playback offset (delay your local mix slightly).
+
+
+Record offset (shift your recorded hits earlier/later when stamping to the grid).
+
+
+Drift fix (e.g., 0.9997× resample or buffer stretch every few seconds to stay locked).
+
+
+4) Verify
+Quick second pass (4 clicks) to confirm you’re within target (say ≤10–15 ms).
+
+
+Why it works
+We don’t fight the internet; we time-stamp precisely and align to a common clock.
+
+
+For real-time feel, we compensate locally so everyone hears a coherent mix.
+
+
+For analysis/recording, we place events on the true timeline, not the “heard” one.
+
+
+
+Implementation Notes (for Kimber)
+Client
+
+
+AudioWorklet for stable capture; measure input buffer latency.
+
+
+Output latency measured by loopback ping (quiet chirp + mic pickup) or OS estimate.
+
+
+For MIDI devices: trust MIDI timestamps; fall back to audio taps if missing.
+
+
+Server
+
+
+Maintain per-user {offset_ms, skew_ppm, jitter_ms}; update after each drill.
+
+
+Provide “apply_suggested_corrections” to clients; keep confidence scores.
+
+
+UI
+
+
+Big round Sync button (matches your Spotify-like transport).
+
+
+Status chip: Synced (±8 ms) / OK (±18 ms) / Resync needed.
+
+
+
+Where AI/“Agents” Help (and where they don’t)
+Great fit for agents:
+Orchestration agent: schedules the 15–20 min sync drill, watches jitter, prompts reruns.
+
+
+Analytics agent: turns timing metrics into human-friendly summaries (“tenor section drifted +12 ms after 25 min; reran sync”).
+
+
+Coach agent: after sync + a take, prescribes drills (“loop bars 28–32 at 0.9×; focus on late beat-3 entries”).
+
+
+Less useful for agents:
+The millisecond-level timing and drift correction are signal-processing problems—do these deterministically. Let AI narrate/advise, not measure.
+
+
+Architecture vibe (modern & sane):
+Event-driven backend:
+
+
+sync.requested → client drill → sync.metrics → sync.corrections.ready
+
+
+take.started / take.completed → analysis jobs → summaries.
+
+
+Small, single-purpose services (“agents”) that subscribe to events:
+
+
+timing-calibrator, analysis-writer, summary-writer, notification-bot.
+
+
+This aligns with where AI tooling is going: deterministic DSP for truth, LLM for explanation and triage, and orchestrator agents to glue it together. Clean, testable, future-proof.
+
+Quick defaults to ship
+Drill cadence: every 15 minutes, and mandatory before a 3-min take.
+
+
+Targets: green ≤10 ms, amber ≤25 ms, red >25 ms.
+
+
+Auto-apply corrections: on by default; show what changed.
+
+
+Privacy: send metrics, not raw audio, for routine drills.
+
+
+
