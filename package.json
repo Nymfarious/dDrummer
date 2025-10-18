@@ -1,0 +1,19 @@
+{
+  "name": "ddrummer-host",
+  "version": "1.0.0",
+  "description": "dDrummer umbrella repository with Devtools Dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev --prefix apps/dashboard",
+    "build": "npm run build --prefix apps/dashboard",
+    "preview": "npm run preview --prefix apps/dashboard"
+  },
+  "keywords": [
+    "ddrummer",
+    "devtools",
+    "dashboard"
+  ],
+  "author": "",
+  "license": "ISC"
+}
