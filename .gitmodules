@@ -1,0 +1,12 @@
+[submodule "apps/ddrummer-rhythm-studio"]
+	path = apps/ddrummer-rhythm-studio
+	url = https://github.com/Nymfarious/ddrummer-rhythm-studio
+	branch = main
+[submodule "apps/drum-hub"]
+	path = apps/drum-hub
+	url = https://github.com/Nymfarious/drum-hub
+	branch = main
+[submodule "apps/drummer-to-midi-pipeline"]
+	path = apps/drummer-to-midi-pipeline
+	url = https://github.com/Nymfarious/Drummer-to-Midi-Pipeline
+	branch = main
