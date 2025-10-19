@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+body { background: theme(colors.background.DEFAULT); color: theme(colors.text.primary); }
+.card {
+  border-radius: theme(borderRadius.card);
+  background: theme(colors.background.card);
+  border: 1px solid theme(colors.border.subtle);
+  box-shadow: theme(boxShadow.card);
+}

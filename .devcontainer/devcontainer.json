@@ -1,6 +1,6 @@
 {
   "name": "dDrummer Development",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "build": { "dockerfile": "Dockerfile" },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -9,13 +9,12 @@
       ]
     }
   },
-  "forwardPorts": [5173],
+  "forwardPorts": [5173, 5174],
   "portsAttributes": {
-    "5173": {
-      "label": "Dashboard",
-      "onAutoForward": "notify"
-    }
+    "5173": { "label": "Dashboard", "onAutoForward": "openBrowser", "protocol": "http" },
+    "5174": { "label": "Rhythm Studio", "onAutoForward": "openBrowser", "protocol": "http" }
   },
   "postCreateCommand": "bash .devcontainer/postCreate.sh",
+  "postStartCommand": "git submodule sync --recursive && git submodule update --init --recursive",
   "remoteUser": "node"
 }

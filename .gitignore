@@ -25,3 +25,6 @@ npm-debug.log*
 # Build tools
 .turbo/
 coverage/
+
+# Local archives
+apps-*.zip

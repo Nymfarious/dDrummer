@@ -1,3 +1,50 @@
+# dDrummer Grand‑daddy DevTools
+
+This repo hosts the Devtools Dashboard and central tooling to seed/standardize sibling apps (submodules): Rhythm Studio, Drum Hub, Drummer‑to‑MIDI Pipeline.
+
+## What’s here
+- Dashboard (apps/dashboard): simple grid that can grow into status/control center
+- Submodules recorded in `.gitmodules`
+- Shared tokens (packages/tokens) with Tailwind preset
+- Devtools CLI (packages/devtools) to apply presets into any app without destructive overwrites
+- Health JSON template for apps (`apps/_template/scripts/create-health.mjs`)
+
+## Running the dashboard
+```bash
+npm --prefix apps/dashboard install
+npm --prefix apps/dashboard run dev
+```
+Forwarded port: 5173
+
+## Seeding a child app with the UI preset
+```bash
+# Dry run
+node packages/devtools/bin/gddev.mjs apply --target apps/ddrummer-rhythm-studio --features ui --dry-run
+
+# Apply
+node packages/devtools/bin/gddev.mjs apply --target apps/ddrummer-rhythm-studio --features ui
+npm --prefix apps/ddrummer-rhythm-studio install
+```
+Note: because sibling apps are submodules, commit changes inside each submodule repo.
+
+## ToDos (live)
+- Root workspace config — DONE
+- Shared tokens package — DONE
+- Health generator template — DONE (template only)
+- CI to build dashboard — DONE
+- Dashboard status helpers — DONE (non-invasive add)
+- Add gddev CLI — IN PROGRESS
+- Wire dashboard Tailwind preset — TODO
+- Add api‑health feature to CLI — TODO
+- Add dashboard UI to trigger gddev — TODO
+
+## Purpose
+Centralize standards and accelerators:
+- One-click “seed” of common UI/tools in any app
+- Shared design tokens (colors, spacing, shadows)
+- Optional health/status pings (static JSON at build)
+- Future: auth wiring, lint/format presets, UI kit, library feature scaffolds
+
 # dDrummer
 
 dDrummer umbrella/host repository - For drummers

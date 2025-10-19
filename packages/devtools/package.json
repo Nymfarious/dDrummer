@@ -1,0 +1,9 @@
+{
+  "name": "@ddrummer/devtools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "gddev": "bin/gddev.mjs"
+  }
+}
