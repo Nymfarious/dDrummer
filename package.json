@@ -4,16 +4,25 @@
   "description": "dDrummer umbrella repository with Devtools Dashboard",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "npm run dev --prefix apps/dashboard",
     "build": "npm run build --prefix apps/dashboard",
-    "preview": "npm run preview --prefix apps/dashboard"
+    "preview": "npm run preview --prefix apps/dashboard",
+    "typecheck": "echo 'use app-level typechecks'",
+    "build:all": "turbo run build --filter=./apps/* || echo 'turbo optional'"
   },
   "keywords": [
     "ddrummer",
     "devtools",
     "dashboard"
   ],
+  "devDependencies": {
+    "turbo": "^1.13.3"
+  },
   "author": "",
   "license": "ISC"
 }

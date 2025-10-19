@@ -1,0 +1,15 @@
+{
+  "name": "@mother-project/tokens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tailwind-preset": "./tailwind-preset.js"
+  },
+  "files": [
+    "src",
+    "tailwind-preset.js"
+  ]
+}

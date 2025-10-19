@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Drum Hub",
+    "baseUrl": "https://drum-hub.yourdomain.app",
+    "desc": "Dev lights, click-track hooks, Supabase integration scaffolding."
+  },
+  {
+    "name": "Rhythm Studio",
+    "baseUrl": "https://ddrummer-rhythm-studio.yourdomain.app",
+    "desc": "Pattern editor and auditioner."
+  }
+]
