@@ -43,7 +43,7 @@ function App() {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col ${isDark ? 'dark' : ''}`}>
+    <div className="min-h-screen flex flex-col">
       <header className="p-8 text-center bg-gradient-to-br from-primary to-purple-700 text-white">
         <div className="flex justify-end mb-4">
           <button
