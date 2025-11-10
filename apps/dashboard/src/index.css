@@ -1,3 +1,8 @@
+@import './styles/tokens.css';
+@import './styles/shadcn-bridge.css';
+@import './styles/utilities.css';
+@import './styles/a11y.css';
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
