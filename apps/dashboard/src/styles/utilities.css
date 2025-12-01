@@ -1,5 +1,5 @@
 .card-gold {
-  background: color-mix(in oklab, var(--card), transparent 10%);
+  background: color-mix(in oklab, #141414, transparent 8%);
   border: 1px solid color-mix(in oklab, var(--gold-500), var(--neutral-800) 65%);
   border-radius: var(--radius-xl);
   box-shadow: var(--gold-shadow);

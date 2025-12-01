@@ -1,29 +1,10 @@
 import { useEffect, useState } from 'react'
 import apps from './apps.json'
+import { resolveBaseUrl } from './utils/resolveBaseUrl'
 import './App.css'
 
 type AppInfo = { name: string; desc: string; baseUrl: string; healthPath: string }
 type Status = 'green' | 'yellow' | 'red' | 'orange'
-
-function resolveBaseUrl(baseUrl: string): string {
-  try {
-    const u = new URL(baseUrl)
-    const host = window.location.hostname
-    const protocol = window.location.protocol
-    const isLocal = u.hostname === 'localhost' || u.hostname === '127.0.0.1'
-    if (host.endsWith('.app.github.dev') && isLocal) {
-      const port = u.port || (u.protocol === 'https:' ? '443' : '80')
-      const parts = host.split('.')
-      const sub = parts[0]
-      const newSub = sub.replace(/-\d+$/, `-${port}`)
-      const targetHost = [newSub, ...parts.slice(1)].join('.')
-      return `${protocol}//${targetHost}${u.pathname}${u.search}${u.hash}`
-    }
-    return baseUrl
-  } catch {
-    return baseUrl
-  }
-}
 
 async function getStatus(app: AppInfo): Promise<Status> {
   try {
