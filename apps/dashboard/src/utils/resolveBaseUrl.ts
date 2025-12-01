@@ -24,11 +24,15 @@ export function resolveBaseUrl(baseUrl: string): string {
 
 /**
  * Validates that a URL is allowed for embedding in an iframe.
- * Only allows localhost, 127.0.0.1, or same-origin URLs.
+ * Only allows absolute URLs pointing to localhost, 127.0.0.1, same-origin, or GitHub Codespaces.
  */
 export function isAllowedUrl(urlString: string): boolean {
   try {
-    const url = new URL(urlString, window.location.origin)
+    // Only allow absolute URLs - reject relative URLs
+    if (!urlString.startsWith('http://') && !urlString.startsWith('https://')) {
+      return false
+    }
+    const url = new URL(urlString)
     // Allow localhost and 127.0.0.1
     if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
       return true

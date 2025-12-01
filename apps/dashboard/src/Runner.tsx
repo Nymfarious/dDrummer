@@ -3,7 +3,7 @@ import { resolveBaseUrl, isAllowedUrl } from './utils/resolveBaseUrl'
 export default function Runner() {
   const raw = new URLSearchParams(window.location.search).get('u') || ''
   const isValid = isAllowedUrl(raw)
-  const src = isValid ? resolveBaseUrl(raw) : ''
+  const src = isValid ? resolveBaseUrl(raw) : 'about:blank'
 
   return (
     <div className="h-dvh w-dvw p-2 bg-neutral-950">
