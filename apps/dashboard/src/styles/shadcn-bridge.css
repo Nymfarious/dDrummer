@@ -1,0 +1,22 @@
+:root, .dark {
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --card: var(--card);
+  --card-foreground: var(--fg);
+  --popover: var(--panel);
+  --popover-foreground: var(--fg);
+  --primary: var(--gold-500);
+  --primary-foreground: #1a1206;
+  --secondary: var(--neutral-800);
+  --secondary-foreground: var(--fg);
+  --muted: var(--neutral-800);
+  --muted-foreground: var(--muted);
+  --accent: var(--gold-400);
+  --accent-foreground: #1a1206;
+  --destructive: #ef4444;
+  --destructive-foreground: #111;
+  --border: color-mix(in oklab, var(--neutral-800), var(--gold-500) 12%);
+  --input: var(--neutral-800);
+  --ring: var(--gold-500);
+  --radius: var(--radius-xl);
+}

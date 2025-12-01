@@ -1,19 +1,12 @@
 {
-  "name": "ddrummer-host",
-  "version": "1.0.0",
-  "description": "dDrummer umbrella repository with Devtools Dashboard",
+  "name": "mother-project",
   "private": true,
-  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "dev": "npm run dev --prefix apps/dashboard",
-    "build": "npm run build --prefix apps/dashboard",
-    "preview": "npm run preview --prefix apps/dashboard"
+    "dev": "npm -w apps/dashboard run dev",
+    "dev:all": "concurrently -n DASH,DRUMHUB,RHYTHM,MIDI \"npm -w apps/dashboard run dev\" \"npm -w apps/drum-hub run dev\" \"npm -w apps/ddrummer-rhythm-studio run dev\" \"npm -w apps/midi-pipeline run dev\""
   },
-  "keywords": [
-    "ddrummer",
-    "devtools",
-    "dashboard"
-  ],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
 }

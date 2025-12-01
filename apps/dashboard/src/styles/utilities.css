@@ -1,0 +1,20 @@
+.card-gold {
+  background: color-mix(in oklab, #141414, transparent 8%);
+  border: 1px solid color-mix(in oklab, var(--gold-500), var(--neutral-800) 65%);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--gold-shadow);
+  backdrop-filter: saturate(110%) blur(6px);
+}
+
+.btn-gold {
+  border-radius: var(--radius-xl);
+  border: 1px solid color-mix(in oklab, var(--gold-500), var(--neutral-800) 55%);
+  background: var(--grad-gold);
+  color: var(--fg);
+  padding: .55rem .9rem;
+  box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, var(--gold-shadow);
+  transition: transform .06s ease, box-shadow .12s ease, filter .12s ease;
+}
+.btn-gold:hover { filter: brightness(1.05); box-shadow: var(--gold-shadow); }
+.btn-gold:active { transform: translateY(1px); }
+.btn-gold:focus-visible { outline: none; box-shadow: var(--gold-shadow), var(--focus-gold); }

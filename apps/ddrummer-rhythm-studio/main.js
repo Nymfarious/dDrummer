@@ -1,0 +1,1 @@
+document.body.insertAdjacentHTML('beforeend', '<p>Rhythm Studio running.</p>')

@@ -1,39 +1,59 @@
+import { useEffect, useState } from 'react'
+import apps from './apps.json'
+import { resolveBaseUrl } from './utils/resolveBaseUrl'
+import './App.css'
 import { useState } from 'react'
 
-interface Tool {
-  name: string
-  description: string
-  repo: string
-  codespacesUrl: string
+type AppInfo = { name: string; desc: string; baseUrl: string; healthPath: string }
+type Status = 'green' | 'yellow' | 'red' | 'orange'
+
+async function getStatus(app: AppInfo): Promise<Status> {
+  try {
+    const r = await fetch(`${resolveBaseUrl(app.baseUrl)}${app.healthPath}`, { cache: 'no-store' })
+    if (!r.ok) return 'orange'
+    const j = await r.json()
+    return j && j.ok ? 'green' : 'yellow'
+  } catch {
+    return 'red'
+  }
 }
 
-const tools: Tool[] = [
-  {
-    name: 'Rhythm Studio',
-    description: 'Tool for creating and editing drum patterns and rhythms',
-    repo: 'Nymfarious/ddrummer-rhythm-studio',
-    codespacesUrl: 'https://github.com/codespaces/new?repo=Nymfarious/ddrummer-rhythm-studio'
-  },
-  {
-    name: 'Drum Hub',
-    description: 'Central hub for drum resources, samples, and tools',
-    repo: 'Nymfarious/drum-hub',
-    codespacesUrl: 'https://github.com/codespaces/new?repo=Nymfarious/drum-hub'
-  },
-  {
-    name: 'Drummer-to-Midi Pipeline',
-    description: 'Convert drum performances to MIDI format',
-    repo: 'Nymfarious/Drummer-to-Midi-Pipeline',
-    codespacesUrl: 'https://github.com/codespaces/new?repo=Nymfarious/Drummer-to-Midi-Pipeline'
-  },
-  {
-    name: 'dDrummer',
-    description: 'Umbrella repository hosting the devtools dashboard',
-    repo: 'Nymfarious/dDrummer',
-    codespacesUrl: 'https://github.com/codespaces/new?repo=Nymfarious/dDrummer'
-  }
-]
+export default function App() {
+  const [statuses, setStatuses] = useState<Record<string, Status>>({})
 
+  useEffect(() => {
+    ;(async () => {
+      const entries = await Promise.all(
+        apps.map(async (a: AppInfo) => [a.name, await getStatus(a)] as const)
+      )
+      setStatuses(Object.fromEntries(entries))
+    })()
+  }, [])
+
+  return (
+    <div className="main">
+      <div className="tools-grid">
+        {apps.map((app: AppInfo) => {
+          const s = statuses[app.name] || ('red' as Status)
+          const dotColor = s === 'green' ? '#22c55e' : s === 'yellow' ? '#f59e0b' : s === 'orange' ? '#f97316' : '#ef4444'
+          const href = resolveBaseUrl(app.baseUrl)
+          return (
+            <div key={app.name} className="tool-card card-gold">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '.25rem' }}>
+                <span
+                  style={{ height: 12, width: 12, borderRadius: 9999, background: dotColor, display: 'inline-block' }}
+                  title={`Status: ${s}`}
+                />
+                <h3 className="tool-name" style={{ margin: 0 }}>{app.name}</h3>
+              </div>
+              <p className="tool-description">{app.desc}</p>
+
+              <div className="tool-actions">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-gold"
 function App() {
   const [isDark, setIsDark] = useState(false)
 
@@ -81,18 +101,24 @@ function App() {
                   rel="noopener noreferrer"
                   className="px-5 py-2.5 rounded-md text-sm font-medium bg-secondary text-secondary-foreground border border-border hover:bg-secondary/80 transition-colors"
                 >
-                  View Repository
+                  Run
                 </a>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => openInRunner(href)}
                 <a
                   href={tool.codespacesUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-5 py-2.5 rounded-md text-sm font-medium bg-gradient-to-br from-primary to-purple-700 text-primary-foreground hover:scale-105 hover:shadow-lg transition-all"
                 >
-                  Open in Codespaces
-                </a>
+                  Run in panel
+                </button>
               </div>
             </div>
+          )
+        })}
+      </div>
           ))}
         </div>
       </main>
@@ -104,4 +130,7 @@ function App() {
   )
 }
 
-export default App
+function openInRunner(url: string) {
+  const runnerUrl = `/runner?u=${encodeURIComponent(url)}`
+  window.location.assign(runnerUrl)
+}

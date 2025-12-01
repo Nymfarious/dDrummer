@@ -1,0 +1,14 @@
+{
+  "name": "@mother-project/tokens",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "src/tokens.ts",
+  "types": "src/tokens.ts",
+  "exports": {
+    ".": {
+      "types": "./src/tokens.ts",
+      "import": "./src/tokens.ts"
+    }
+  }
+}

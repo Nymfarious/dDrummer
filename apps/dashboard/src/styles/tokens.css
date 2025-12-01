@@ -1,0 +1,37 @@
+:root {
+  /* neutrals */
+  --neutral-50:#f7f7f7; --neutral-100:#eeeeee; --neutral-200:#dcdcdc;
+  --neutral-300:#bdbdbd; --neutral-400:#989898; --neutral-500:#7a7a7a;
+  --neutral-600:#5f5f5f; --neutral-700:#454545; --neutral-800:#2d2d2d;
+  --neutral-900:#171717; --neutral-950:#0b0b0b;
+
+  /* gold */
+  --gold-50:#fff9eb; --gold-100:#fdecc7; --gold-200:#f8d98b;
+  --gold-300:#f0c354; --gold-400:#e6aa2f; --gold-500:#d99615;
+  --gold-600:#b67810; --gold-700:#8d5a0e; --gold-800:#6b450e; --gold-900:#4f3410;
+
+  /* core surfaces/fg */
+  --bg: var(--neutral-950);
+  --panel: #121212;
+  --card: rgba(20,20,20,.92);
+  --fg: #f2f2f2;
+  --muted: #cfcfcf;
+
+  /* gold utility */
+  --gold-shadow: 0 0 0 1px rgba(233,185,73,.35), 0 12px 40px rgba(217,150,21,.15);
+  --focus-gold: 0 0 0 3px rgba(217,150,21,.45);
+
+  /* radii */
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px; --radius-xl: 24px;
+
+  /* gradient */
+  --grad-gold: linear-gradient(135deg, rgba(249,223,157,.30) 0%, rgba(217,150,21,.20) 42%, rgba(79,52,16,.25) 100%);
+}
+
+.theme-light {
+  --bg:#fafafa;
+  --panel:#ffffff;
+  --card:#ffffff;
+  --fg:#151515;
+  --muted:#444;
+}

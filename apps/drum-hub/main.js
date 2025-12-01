@@ -1,0 +1,1 @@
+document.body.insertAdjacentHTML('beforeend', '<p>Drum Hub running.</p>')
