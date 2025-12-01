@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,height=device-height,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Runner</title>
+    <style>
+      html, body { margin:0; padding:0; height:100%; background:#111; }
+      #frame { border:0; width:100%; height:100%; display:block; }
+    </style>
+  </head>
+  <body>
+    <iframe id="frame" allow="clipboard-read; clipboard-write"></iframe>
+    <script>
+      const u = new URL(location.href);
+      const target = u.searchParams.get('u') || '/';
+      // Guard against X-Frame-Options DENY/SAMEORIGIN
+      fetch(target, { method:'HEAD', mode:'no-cors' })
+        .catch(() => {}) // ignore
+        .finally(() => { document.getElementById('frame').src = target; });
+    </script>
+  </body>
+</html>

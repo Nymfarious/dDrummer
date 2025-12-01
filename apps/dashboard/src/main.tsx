@@ -1,17 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import Runner from './Runner'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import Runner from "./runner";
+import "./index.css";
 
-function RootRouter() {
-  const path = window.location.pathname || '/'
-  if (path.startsWith('/runner')) return <Runner />
-  return <App />
+const mount = document.getElementById("root")!;
+const root = createRoot(mount);
+
+// Trim trailing slash so "/runner/" works too
+const path = window.location.pathname.replace(/\/+$/, "");
+
+if (path === "/runner") {
+  root.render(<Runner />);
+} else {
+  root.render(<App />);
 }
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RootRouter />
-  </StrictMode>,
-)

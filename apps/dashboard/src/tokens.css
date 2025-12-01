@@ -1,0 +1,26 @@
+:root {
+  /* Base tokens (variables only) */
+  --background: 220 12% 98%;
+  --foreground: 220 12% 12%;
+  --ui-foreground: 220 12% 12%;
+
+  /* Gold scale */
+  --gold-400: 40 90% 56%;
+  --gold-500: 40 86% 46%;
+  --gold-600: 40 78% 38%;
+
+  /* Primary mapping to gold (visuals driven from tokens) */
+  --primary: var(--gold-500);
+  --primary-foreground: 40 20% 12%;
+  --accent: var(--gold-400);
+}
+
+/* Dark-mode overrides only (variables) */
+:root.dark,
+html.dark {
+  --background: 220 10% 8%;
+  --foreground: 220 18% 92%;
+  --gold-400: 40 86% 50%;
+  --gold-500: 40 76% 40%;
+  --gold-600: 40 70% 34%;
+}

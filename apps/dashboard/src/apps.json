@@ -1,19 +1,19 @@
 [
   {
-    "name": "Drum Hub",
-    "desc": "Practice tools, metronome, pin-able widgets.",
-    "baseUrl": "http://localhost:5174",
-    "healthPath": "/health.json"
-  },
-  {
     "name": "Rhythm Studio",
-    "desc": "AI workspace, flowchart, dev lights.",
+    "desc": "Create/edit rhythms",
     "baseUrl": "http://localhost:5175",
     "healthPath": "/health.json"
   },
   {
+    "name": "Drum Hub",
+    "desc": "Samples & tools",
+    "baseUrl": "http://localhost:5174",
+    "healthPath": "/health.json"
+  },
+  {
     "name": "MIDI Pipeline",
-    "desc": "Video → notes → MIDI (docs & stubs).",
+    "desc": "Video ➜ Notes ➜ MIDI",
     "baseUrl": "http://localhost:5176",
     "healthPath": "/health.json"
   }
